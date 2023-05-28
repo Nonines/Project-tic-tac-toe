@@ -1,4 +1,4 @@
-function Gameboard() {
+const Gameboard = () => {
   const board = [];
   const rows = 3;
   const columns = 3;
@@ -27,16 +27,16 @@ function Gameboard() {
   };
 
   return { getBoard, markCell };
-}
+};
 
-function Player(name, id) {
+const Player = (name, id) => {
   const playerName = name;
   const playerID = id;
 
   return { playerName, playerID };
-}
+};
 
-function GameController() {
+const GameController = (() => {
   const gameboard = Gameboard();
   const playerOne = Player("Player 1", 1);
   const playerTwo = Player("Player 2", 2);
@@ -59,8 +59,11 @@ function GameController() {
   const win = (turns, id) => {
     const board = gameboard.getBoard();
 
+    /*
+    The various winning conditions for tictactoe. This works by first checking if at least five turns have been played, the minimum required to produce a winner. If that is true, it then checks for the inputted value in each of the 5 different sections of the 3X3 grid from where a win is possible, and then confirming if the remaining two corresponding sections have the exact same value, ending the function at any point where this is true.
+    */
     if (turns > 4) {
-      if (board[0][0] === id && id > 0) {
+      if (board[0][0] === id) {
         if (board[0][1] === id && board[0][2] == id) {
           return true;
         } else if (board[1][0] === id && board[2][0] == id) {
@@ -68,21 +71,21 @@ function GameController() {
         } else if (board[1][1] === id && board[2][2] == id) {
           return true;
         }
-      } else if (board[0][2] === id && id > 0) {
+      } else if (board[0][2] === id) {
         if (board[1][1] === id && board[2][0] == id) {
           return true;
         } else if (board[1][2] === id && board[2][2] == id) {
           return true;
         }
-      } else if (board[0][1] === id && id > 0) {
+      } else if (board[0][1] === id) {
         if (board[1][1] === id && board[2][1] == id) {
           return true;
         }
-      } else if (board[1][0] === id && id > 0) {
+      } else if (board[1][0] === id) {
         if (board[1][1] === id && board[1][2] == id) {
           return true;
         }
-      } else if (board[2][0] === id && id > 0) {
+      } else if (board[2][0] === id) {
         if (board[2][1] === id && board[2][2] == id) {
           return true;
         }
@@ -90,6 +93,10 @@ function GameController() {
     } else {
       return false;
     }
+  };
+
+  const gameWon = () => {
+    // stuff to do after getting a winner
   };
 
   const playRound = (row, column) => {
@@ -103,15 +110,17 @@ function GameController() {
       // if any of the win conditions are satisfied, end the game
       if (win(turns, getCurrentPlayer().playerID)) {
         console.log(`${getCurrentPlayer().playerName} wins!!`);
+        gameWon();
         return;
+
+        // if there's no winner yet, switch players
+      } else {
+        switchPlayer();
       }
 
-      // if there's no winner yet, switch players
-      switchPlayer();
-
-      // if the move is illegal or game has ended, provide an error msg
+      // if the move is illegal provide an error msg
     } else {
-      console.log("Invalid move or game over");
+      console.log("Invalid move");
     }
 
     console.log(gameboard.getBoard());
@@ -119,6 +128,4 @@ function GameController() {
   };
 
   return { playRound };
-}
-
-const newGame = GameController();
+})();
