@@ -104,88 +104,107 @@ const GameController = (() => {
 
     // If a legal move is played, insert the player id in the board
     if (gameboard.markCell(getCurrentPlayer().playerID, row, column)) {
-      // increment the turn counter
       turns++;
 
       // if any of the win conditions are satisfied, end the game
       if (win(turns, getCurrentPlayer().playerID)) {
         console.log(`${getCurrentPlayer().playerName} wins!!`);
         gameWon();
-        return;
+        return true;
 
         // if there's no winner yet, switch players
       } else {
         switchPlayer();
       }
 
-      // if the move is illegal provide an error msg
+      console.log(gameboard.getBoard());
+      console.log(`Next player: ${getCurrentPlayer().playerName}`);
+      return true;
+
+      // if the move is illegal provide an error msg and return false
     } else {
       console.log("Invalid move");
+      return false;
     }
-
-    console.log(gameboard.getBoard());
-    console.log(`Next player: ${getCurrentPlayer().playerName}`);
   };
 
-  return { playRound };
+  return { playRound, getCurrentPlayer };
 })();
 
 const displayController = (() => {
-  let gridArea; // represents a single segement of the 3x3 grid
   const boardContainer = document.querySelector("#board-container");
 
-  // const updateInput = (index, player) => {
-  //   const area = document.querySelector(
-  //     `#board-container [data-area-index=${CSS.escape(index)}]`
-  //   );
+  const updateInput = (gridAreaIndex, playerId) => {
+    const area = document.querySelector(
+      `#board-container [data-area-index=${CSS.escape(gridAreaIndex)}]`
+    );
 
-  //   if (player === 1) {
-  //     area.textContent = "X";
-  //   } else if (player === 2) {
-  //     area.textContent = "O";
-  //   }
-  // };
+    if (playerId === 1) {
+      area.textContent = "X";
+    } else if (playerId === 2) {
+      area.textContent = "O";
+    }
+  };
 
   const playerInput = (index) => {
+    const activePlayer = GameController.getCurrentPlayer();
+
     switch (index) {
       case 0:
-        GameController.playRound(0, 0);
+        if (GameController.playRound(0, 0)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 1:
-        GameController.playRound(0, 1);
+        if (GameController.playRound(0, 1)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 2:
-        GameController.playRound(0, 2);
+        if (GameController.playRound(0, 2)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 3:
-        GameController.playRound(1, 0);
+        if (GameController.playRound(1, 0)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 4:
-        GameController.playRound(1, 1);
+        if (GameController.playRound(1, 1)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 5:
-        GameController.playRound(1, 2);
+        if (GameController.playRound(1, 2)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 6:
-        GameController.playRound(2, 0);
+        if (GameController.playRound(2, 0)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 7:
-        GameController.playRound(2, 1);
+        if (GameController.playRound(2, 1)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
       case 8:
-        GameController.playRound(2, 2);
+        if (GameController.playRound(2, 2)) {
+          updateInput(index, activePlayer.playerID);
+        }
         break;
     }
   };
 
+  // Handles click events for the grid areas
   for (let index = 0; index < boardContainer.children.length; index++) {
-    gridArea = boardContainer.children.item(index);
+    let gridArea = boardContainer.children.item(index);
     gridArea.dataset.areaIndex = index;
 
     gridArea.addEventListener("click", () => {
       playerInput(index);
     });
   }
-
-  return { gridArea };
 })();
