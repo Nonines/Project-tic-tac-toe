@@ -95,8 +95,17 @@ const GameController = (() => {
     }
   };
 
-  const gameWon = () => {
-    // stuff to do after getting a winner
+  const gameResult = (result) => {
+    if (result === "draw") {
+      return;
+    }
+
+    // simply fill the board array with a random value that is not a playerID
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        gameboard.getBoard()[i][j] = 3;
+      }
+    }
   };
 
   const playRound = (row, column) => {
@@ -106,13 +115,19 @@ const GameController = (() => {
     if (gameboard.markCell(getCurrentPlayer().playerID, row, column)) {
       turns++;
 
-      // if any of the win conditions are satisfied, end the game
+      // and if any of the win conditions are satisfied, end the game
       if (win(turns, getCurrentPlayer().playerID)) {
         console.log(`${getCurrentPlayer().playerName} wins!!`);
-        gameWon();
+        gameResult("win");
         return true;
 
-        // if there's no winner yet, switch players
+        // or if 9 turns have already been played, draw the game
+      } else if (turns === 9) {
+        console.log("Draw!");
+        gameResult("draw");
+        return true;
+
+        // or if there's no winner yet, switch players
       } else {
         switchPlayer();
       }
