@@ -129,3 +129,63 @@ const GameController = (() => {
 
   return { playRound };
 })();
+
+const displayController = (() => {
+  let gridArea; // represents a single segement of the 3x3 grid
+  const boardContainer = document.querySelector("#board-container");
+
+  // const updateInput = (index, player) => {
+  //   const area = document.querySelector(
+  //     `#board-container [data-area-index=${CSS.escape(index)}]`
+  //   );
+
+  //   if (player === 1) {
+  //     area.textContent = "X";
+  //   } else if (player === 2) {
+  //     area.textContent = "O";
+  //   }
+  // };
+
+  const playerInput = (index) => {
+    switch (index) {
+      case 0:
+        GameController.playRound(0, 0);
+        break;
+      case 1:
+        GameController.playRound(0, 1);
+        break;
+      case 2:
+        GameController.playRound(0, 2);
+        break;
+      case 3:
+        GameController.playRound(1, 0);
+        break;
+      case 4:
+        GameController.playRound(1, 1);
+        break;
+      case 5:
+        GameController.playRound(1, 2);
+        break;
+      case 6:
+        GameController.playRound(2, 0);
+        break;
+      case 7:
+        GameController.playRound(2, 1);
+        break;
+      case 8:
+        GameController.playRound(2, 2);
+        break;
+    }
+  };
+
+  for (let index = 0; index < boardContainer.children.length; index++) {
+    gridArea = boardContainer.children.item(index);
+    gridArea.dataset.areaIndex = index;
+
+    gridArea.addEventListener("click", () => {
+      playerInput(index);
+    });
+  }
+
+  return { gridArea };
+})();
