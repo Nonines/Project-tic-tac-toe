@@ -11,7 +11,6 @@ const Gameboard = () => {
     }
   }
 
-  // gets the game board
   const getBoard = () => {
     return board;
   };
@@ -59,36 +58,53 @@ const GameController = (() => {
   const win = (turns, id) => {
     const board = gameboard.getBoard();
 
-    /*
-    The various winning conditions for tictactoe. This works by first checking if at least five turns have been played, the minimum required to produce a winner. If that is true, it then checks for the inputted value in each of the 5 different sections of the 3X3 grid from where a win is possible, and then confirming if the remaining two corresponding sections have the exact same value, ending the function at any point where this is true.
-    */
     if (turns > 4) {
-      if (board[0][0] === id) {
-        if (board[0][1] === id && board[0][2] == id) {
-          return true;
-        } else if (board[1][0] === id && board[2][0] == id) {
-          return true;
-        } else if (board[1][1] === id && board[2][2] == id) {
-          return true;
-        }
-      } else if (board[0][2] === id) {
-        if (board[1][1] === id && board[2][0] == id) {
-          return true;
-        } else if (board[1][2] === id && board[2][2] == id) {
-          return true;
-        }
-      } else if (board[0][1] === id) {
-        if (board[1][1] === id && board[2][1] == id) {
-          return true;
-        }
-      } else if (board[1][0] === id) {
-        if (board[1][1] === id && board[1][2] == id) {
-          return true;
-        }
-      } else if (board[2][0] === id) {
-        if (board[2][1] === id && board[2][2] == id) {
-          return true;
-        }
+      if (board[0][0] === id && board[0][1] === id && board[0][2] === id) {
+        return true;
+      } else if (
+        board[0][0] === id &&
+        board[1][0] === id &&
+        board[2][0] === id
+      ) {
+        return true;
+      } else if (
+        board[0][0] === id &&
+        board[1][1] === id &&
+        board[2][2] === id
+      ) {
+        return true;
+      } else if (
+        board[0][2] === id &&
+        board[1][1] === id &&
+        board[2][0] === id
+      ) {
+        return true;
+      } else if (
+        board[0][2] === id &&
+        board[1][2] === id &&
+        board[2][2] === id
+      ) {
+        return true;
+      } else if (
+        board[0][1] === id &&
+        board[1][1] === id &&
+        board[2][1] === id
+      ) {
+        return true;
+      } else if (
+        board[1][0] === id &&
+        board[1][1] === id &&
+        board[1][2] === id
+      ) {
+        return true;
+      } else if (
+        board[2][0] === id &&
+        board[2][1] === id &&
+        board[2][2] === id
+      ) {
+        return true;
+      } else {
+        return false;
       }
     } else {
       return false;
