@@ -163,7 +163,30 @@ const GameController = (() => {
 })();
 
 const displayController = (() => {
+  const vsPlayerSelection = document.querySelector(".vs-player");
+  const vsComSelection = document.querySelector(".vs-com");
+  const startGameSelection = document.querySelector(".start-game");
+  const boardDialog = document.querySelector("#board-modal");
   const boardContainer = document.querySelector("#board-container");
+
+  vsPlayerSelection.addEventListener("click", () => {
+    vsPlayerSelection.classList.add("selected");
+    vsComSelection.classList.remove("selected");
+  });
+
+  vsComSelection.addEventListener("click", () => {
+    vsComSelection.classList.add("selected");
+    vsPlayerSelection.classList.remove("selected");
+  });
+
+  startGameSelection.addEventListener("click", () => {
+    if (
+      vsPlayerSelection.classList.contains("selected") ||
+      vsComSelection.classList.contains("selected")
+    ) {
+      boardDialog.showModal();
+    }
+  });
 
   const updateInput = (gridAreaIndex, playerId) => {
     const area = document.querySelector(

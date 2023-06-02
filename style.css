@@ -60,11 +60,29 @@ main > div.selected {
   border: none;
 }
 
-/* #board-container {
+#board-container {
   width: 300px;
   height: 300px;
-  background-color: bisque;
+  background-color: rgb(35, 46, 68);
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-} */
+}
+
+dialog {
+  display: block;
+  margin: auto;
+  opacity: 0;
+  scale: 0;
+  transition: all 1s;
+}
+
+dialog[open] {
+  opacity: 1;
+  scale: 1;
+  border: 1px solid black;
+}
+
+dialog:focus-visible {
+  outline: none;
+}
