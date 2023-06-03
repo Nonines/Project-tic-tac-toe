@@ -131,6 +131,18 @@ const GameController = (() => {
     return { won: gameWon, drawn: gameDrawn };
   };
 
+  const resetGame = () => {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        gameboard.getBoard()[i][j] = 0;
+      }
+    }
+    turns = 0;
+    gameDrawn = false;
+    gameWon = false;
+    currentPlayer = playerOne;
+  };
+
   const playRound = (row, column) => {
     console.log(`Current player: ${getCurrentPlayer().playerName}`);
 
@@ -166,7 +178,7 @@ const GameController = (() => {
     }
   };
 
-  return { playRound, getCurrentPlayer, gameState };
+  return { playRound, getCurrentPlayer, gameState, resetGame };
 })();
 
 const displayController = (() => {
@@ -174,8 +186,10 @@ const displayController = (() => {
   const vsComSelection = document.querySelector(".vs-com");
   const startGameSelection = document.querySelector(".start-game");
   const boardDialog = document.querySelector("#board-modal");
+  const dialogCloseButton = document.querySelector("#close-modal");
   const boardContainer = document.querySelector("#board-container");
   const turnInfoContainer = document.querySelector("#turn-info");
+
   turnInfoContainer.textContent = `${
     GameController.getCurrentPlayer().playerName
   }'s turn`;
@@ -196,6 +210,20 @@ const displayController = (() => {
       vsComSelection.classList.contains("selected")
     ) {
       boardDialog.showModal();
+    }
+  });
+
+  dialogCloseButton.addEventListener("click", () => {
+    boardDialog.close();
+    GameController.resetGame();
+    turnInfoContainer.textContent = `${
+      GameController.getCurrentPlayer().playerName
+    }'s turn`;
+    for (let index = 0; index < boardContainer.children.length; index++) {
+      const area = document.querySelector(
+        `#board-container [data-area-index=${CSS.escape(index)}]`
+      );
+      area.textContent = "";
     }
   });
 
