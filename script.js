@@ -41,6 +41,8 @@ const GameController = (() => {
   const playerTwo = Player("Player 2", 2);
 
   let turns = 0;
+  let gameDrawn = false;
+  let gameWon = false;
   let currentPlayer = playerOne;
 
   const getCurrentPlayer = () => {
@@ -111,17 +113,22 @@ const GameController = (() => {
     }
   };
 
-  const gameResult = (result) => {
+  const gameEnded = (result) => {
     if (result === "draw") {
-      return;
-    }
-
-    // simply fill the board array with a random value that is not a playerID
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        gameboard.getBoard()[i][j] = 3;
+      gameDrawn = true;
+    } else if (result === "win") {
+      gameWon = true;
+      // fill the board array with a random value that is not a playerID
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          gameboard.getBoard()[i][j] = 3;
+        }
       }
     }
+  };
+
+  const gameState = () => {
+    return { won: gameWon, drawn: gameDrawn };
   };
 
   const playRound = (row, column) => {
@@ -134,13 +141,13 @@ const GameController = (() => {
       // and if any of the win conditions are satisfied, end the game
       if (win(turns, getCurrentPlayer().playerID)) {
         console.log(`${getCurrentPlayer().playerName} wins!!`);
-        gameResult("win");
+        gameEnded("win");
         return true;
 
         // or if 9 turns have already been played, draw the game
       } else if (turns === 9) {
         console.log("Draw!");
-        gameResult("draw");
+        gameEnded("draw");
         return true;
 
         // or if there's no winner yet, switch players
@@ -159,7 +166,7 @@ const GameController = (() => {
     }
   };
 
-  return { playRound, getCurrentPlayer };
+  return { playRound, getCurrentPlayer, gameState };
 })();
 
 const displayController = (() => {
@@ -168,6 +175,10 @@ const displayController = (() => {
   const startGameSelection = document.querySelector(".start-game");
   const boardDialog = document.querySelector("#board-modal");
   const boardContainer = document.querySelector("#board-container");
+  const turnInfoContainer = document.querySelector("#turn-info");
+  turnInfoContainer.textContent = `${
+    GameController.getCurrentPlayer().playerName
+  }'s turn`;
 
   vsPlayerSelection.addEventListener("click", () => {
     vsPlayerSelection.classList.add("selected");
@@ -188,7 +199,8 @@ const displayController = (() => {
     }
   });
 
-  const updateInput = (gridAreaIndex, playerId) => {
+  const updateDisplay = (gridAreaIndex, playerId) => {
+    // update board display
     const area = document.querySelector(
       `#board-container [data-area-index=${CSS.escape(gridAreaIndex)}]`
     );
@@ -198,6 +210,20 @@ const displayController = (() => {
     } else if (playerId === 2) {
       area.textContent = "O";
     }
+
+    // update info display
+    const { won, drawn } = GameController.gameState();
+    if (won) {
+      turnInfoContainer.textContent = `${
+        GameController.getCurrentPlayer().playerName
+      } has won`;
+    } else if (drawn) {
+      turnInfoContainer.textContent = "The game has ended in a draw";
+    } else {
+      turnInfoContainer.textContent = `${
+        GameController.getCurrentPlayer().playerName
+      }'s turn`;
+    }
   };
 
   const playerInput = (index) => {
@@ -206,47 +232,47 @@ const displayController = (() => {
     switch (index) {
       case 0:
         if (GameController.playRound(0, 0)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 1:
         if (GameController.playRound(0, 1)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 2:
         if (GameController.playRound(0, 2)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 3:
         if (GameController.playRound(1, 0)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 4:
         if (GameController.playRound(1, 1)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 5:
         if (GameController.playRound(1, 2)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 6:
         if (GameController.playRound(2, 0)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 7:
         if (GameController.playRound(2, 1)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
       case 8:
         if (GameController.playRound(2, 2)) {
-          updateInput(index, activePlayer.playerID);
+          updateDisplay(index, activePlayer.playerID);
         }
         break;
     }
