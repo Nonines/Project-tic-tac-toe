@@ -3,7 +3,6 @@ const Gameboard = () => {
   const rows = 3;
   const columns = 3;
 
-  // creates the 2d array matching to the gameboard's grids
   for (let i = 0; i < rows; i++) {
     board[i] = [];
     for (let j = 0; j < columns; j++) {
@@ -15,7 +14,6 @@ const Gameboard = () => {
     return board;
   };
 
-  // allows a player to place a marker in a board cell
   const markCell = (playerID, row, column) => {
     const currentGrid = board;
     if (currentGrid[row][column] === 0) {
@@ -118,7 +116,6 @@ const GameController = (() => {
       gameDrawn = true;
     } else if (result === "win") {
       gameWon = true;
-      // fill the board array with a random value that is not a playerID
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           gameboard.getBoard()[i][j] = 3;
@@ -144,36 +141,21 @@ const GameController = (() => {
   };
 
   const playRound = (row, column) => {
-    console.log(`Current player: ${getCurrentPlayer().playerName}`);
-
-    // If a legal move is played, insert the player id in the board
     if (gameboard.markCell(getCurrentPlayer().playerID, row, column)) {
       turns++;
 
-      // and if any of the win conditions are satisfied, end the game
       if (win(turns, getCurrentPlayer().playerID)) {
-        console.log(`${getCurrentPlayer().playerName} wins!!`);
         gameEnded("win");
         return true;
-
-        // or if 9 turns have already been played, draw the game
       } else if (turns === 9) {
-        console.log("Draw!");
         gameEnded("draw");
         return true;
-
-        // or if there's no winner yet, switch players
       } else {
         switchPlayer();
       }
 
-      console.log(gameboard.getBoard());
-      console.log(`Next player: ${getCurrentPlayer().playerName}`);
       return true;
-
-      // if the move is illegal provide an error msg and return false
     } else {
-      console.log("Invalid move");
       return false;
     }
   };
@@ -234,7 +216,6 @@ const displayController = (() => {
   });
 
   const updateDisplay = (gridAreaIndex, playerId) => {
-    // update board display
     const area = document.querySelector(
       `#board-container [data-area-index=${CSS.escape(gridAreaIndex)}]`
     );
@@ -245,7 +226,6 @@ const displayController = (() => {
       area.textContent = "O";
     }
 
-    // update info display
     const { won, drawn } = GameController.gameState();
     if (won) {
       turnInfoContainer.textContent = `${
@@ -312,7 +292,6 @@ const displayController = (() => {
     }
   };
 
-  // Handles click events for the grid areas
   for (let index = 0; index < boardContainer.children.length; index++) {
     let gridArea = boardContainer.children.item(index);
     gridArea.dataset.areaIndex = index;

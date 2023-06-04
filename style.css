@@ -10,7 +10,8 @@
 }
 
 body {
-  min-height: 99vh;
+  min-height: 100vh;
+  height: 600px;
   width: 100%;
   padding: 10px;
   background-color: rgb(35, 46, 68);
@@ -21,25 +22,29 @@ body {
   align-items: center;
 }
 
+h1 {
+  height: 10%;
+}
+
 img {
   display: block;
-  width: 64px;
-  height: 64px;
+  height: 100%;
+  width: 100%;
 }
 
 main {
-  width: 740px;
-  height: 600px;
+  height: 90%;
+  width: 80%;
   padding: 20px;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  gap: 10%;
 }
 
 main > div {
+  height: 33%;
   width: 100%;
-  height: 150px;
   border: 1px solid rgb(0, 0, 0);
   border-radius: 8px;
 
@@ -51,8 +56,6 @@ main > div {
 
 main > div:hover {
   border: 1px solid rgb(56 48 181);
-  /* box-shadow: -6px 6px 0px 0px rgb(42, 22, 134); */
-  transform: scale(1.1);
   transition-duration: 1s;
 }
 
@@ -60,8 +63,18 @@ main > div.selected {
   border: 1px solid rgb(181, 48, 70);
 }
 
-.start-game,
-.start-game:hover {
+main > div > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main > div > div > img {
+  height: 80%;
+  width: 80%;
+}
+
+.start-game {
   border: none;
 }
 
@@ -70,10 +83,10 @@ dialog {
   margin: auto;
   opacity: 0;
   scale: 0;
-  /* transition: all 1s; */
 
   height: 500px;
   width: 400px;
+  min-width: fit-content;
 }
 
 dialog[open] {
@@ -93,7 +106,6 @@ dialog[open] {
 }
 
 dialog[open] > div {
-  /* border: 1px solid rgb(0, 0, 0); */
   width: 100%;
 }
 
@@ -158,6 +170,7 @@ dialog::backdrop {
   border: 1px solid rgb(6 6 46);
   font-size: larger;
   background-color: rgb(28, 28, 95);
+  outline: none;
 }
 
 #ui-container button:active {
