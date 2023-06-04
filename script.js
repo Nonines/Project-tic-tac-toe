@@ -37,8 +37,8 @@ const Player = (name, id) => {
 
 const GameController = (() => {
   const gameboard = Gameboard();
-  const playerOne = Player("Player 1", 1);
-  const playerTwo = Player("Player 2", 2);
+  const playerOne = Player("X", 1);
+  const playerTwo = Player("O", 2);
 
   let turns = 0;
   let gameDrawn = false;
@@ -187,12 +187,22 @@ const displayController = (() => {
   const startGameSelection = document.querySelector(".start-game");
   const boardDialog = document.querySelector("#board-modal");
   const dialogCloseButton = document.querySelector("#close-modal");
+  const dialogRestartButton = document.querySelector("#restart-game");
   const boardContainer = document.querySelector("#board-container");
   const turnInfoContainer = document.querySelector("#turn-info");
 
-  turnInfoContainer.textContent = `${
-    GameController.getCurrentPlayer().playerName
-  }'s turn`;
+  const resetDisplay = () => {
+    GameController.resetGame();
+    turnInfoContainer.textContent = `${
+      GameController.getCurrentPlayer().playerName
+    }'s turn`;
+    for (let index = 0; index < boardContainer.children.length; index++) {
+      const area = document.querySelector(
+        `#board-container [data-area-index=${CSS.escape(index)}]`
+      );
+      area.textContent = "";
+    }
+  };
 
   vsPlayerSelection.addEventListener("click", () => {
     vsPlayerSelection.classList.add("selected");
@@ -210,21 +220,17 @@ const displayController = (() => {
       vsComSelection.classList.contains("selected")
     ) {
       boardDialog.showModal();
+      resetDisplay();
     }
   });
 
   dialogCloseButton.addEventListener("click", () => {
     boardDialog.close();
-    GameController.resetGame();
-    turnInfoContainer.textContent = `${
-      GameController.getCurrentPlayer().playerName
-    }'s turn`;
-    for (let index = 0; index < boardContainer.children.length; index++) {
-      const area = document.querySelector(
-        `#board-container [data-area-index=${CSS.escape(index)}]`
-      );
-      area.textContent = "";
-    }
+    resetDisplay();
+  });
+
+  dialogRestartButton.addEventListener("click", () => {
+    resetDisplay();
   });
 
   const updateDisplay = (gridAreaIndex, playerId) => {
@@ -244,13 +250,13 @@ const displayController = (() => {
     if (won) {
       turnInfoContainer.textContent = `${
         GameController.getCurrentPlayer().playerName
-      } has won`;
+      } wins!`;
     } else if (drawn) {
-      turnInfoContainer.textContent = "The game has ended in a draw";
+      turnInfoContainer.textContent = "Draw!";
     } else {
       turnInfoContainer.textContent = `${
         GameController.getCurrentPlayer().playerName
-      }'s turn`;
+      }'s turn!`;
     }
   };
 

@@ -45,20 +45,25 @@
     </main>
 
     <dialog id="board-modal">
-      <div id="turn-info"></div>
-      <div id="board-container">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+      <div id="ui-container">
+        <div id="turn-info"></div>
+
+        <div id="buttons">
+          <button id="restart-game">&circlearrowright;</button>
+          <button id="close-modal">&times;</button>
+        </div>
       </div>
-      <div id="controls">
-        <button id="close-modal">End Game</button>
+
+      <div id="board-container">
+        <div class="right bottom"></div>
+        <div class="right bottom"></div>
+        <div class="bottom"></div>
+        <div class="right bottom"></div>
+        <div class="right bottom"></div>
+        <div class="bottom"></div>
+        <div class="right"></div>
+        <div class="right"></div>
+        <div></div>
       </div>
     </dialog>
   </body>
