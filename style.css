@@ -83,6 +83,7 @@ dialog {
   margin: auto;
   opacity: 0;
   scale: 0;
+  transition-duration: 1s;
 
   height: 500px;
   width: 400px;
@@ -92,6 +93,7 @@ dialog {
 dialog[open] {
   opacity: 1;
   scale: 1;
+  transition-duration: 1s;
 
   border: 1px solid rgb(0, 0, 0);
   border-radius: 16px;

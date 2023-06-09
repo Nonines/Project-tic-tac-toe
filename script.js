@@ -36,15 +36,48 @@ const Player = (name, id) => {
 const GameController = (() => {
   const gameboard = Gameboard();
   const playerOne = Player("X", 1);
-  const playerTwo = Player("O", 2);
+  let playerTwo = Player("O", 2);
 
   let turns = 0;
   let gameDrawn = false;
   let gameWon = false;
   let currentPlayer = playerOne;
+  let vsCom = false;
 
   const getCurrentPlayer = () => {
     return currentPlayer;
+  };
+
+  const selectCom = () => {
+    playerTwo = Player("COM", 2);
+    vsCom = true;
+  };
+
+  const selectPlayer = () => {
+    playerTwo = Player("O", 2);
+    vsCom = false;
+  };
+
+  const comSelection = () => {
+    const gridValues = [];
+    const validIndexes = [];
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        gridValues.push(gameboard.getBoard()[i][j]);
+      }
+    }
+
+    for (let i = 0; i < gridValues.length; i++) {
+      if (gridValues[i] === 0) {
+        validIndexes.push(i);
+      }
+    }
+
+    const randomValidIndex =
+      validIndexes[Math.floor(Math.random() * validIndexes.length)];
+
+    return randomValidIndex;
   };
 
   const switchPlayer = () => {
@@ -52,6 +85,10 @@ const GameController = (() => {
       currentPlayer = playerTwo;
     } else {
       currentPlayer = playerOne;
+    }
+
+    if (currentPlayer === playerTwo && vsCom) {
+      DisplayController.playerInput(comSelection());
     }
   };
 
@@ -160,10 +197,17 @@ const GameController = (() => {
     }
   };
 
-  return { playRound, getCurrentPlayer, gameState, resetGame };
+  return {
+    playRound,
+    getCurrentPlayer,
+    gameState,
+    resetGame,
+    selectCom,
+    selectPlayer,
+  };
 })();
 
-const displayController = (() => {
+const DisplayController = (() => {
   const vsPlayerSelection = document.querySelector(".vs-player");
   const vsComSelection = document.querySelector(".vs-com");
   const startGameSelection = document.querySelector(".start-game");
@@ -177,7 +221,7 @@ const displayController = (() => {
     GameController.resetGame();
     turnInfoContainer.textContent = `${
       GameController.getCurrentPlayer().playerName
-    }'s turn`;
+    }'s turn!`;
     for (let index = 0; index < boardContainer.children.length; index++) {
       const area = document.querySelector(
         `#board-container [data-area-index=${CSS.escape(index)}]`
@@ -197,12 +241,14 @@ const displayController = (() => {
   });
 
   startGameSelection.addEventListener("click", () => {
-    if (
-      vsPlayerSelection.classList.contains("selected") ||
-      vsComSelection.classList.contains("selected")
-    ) {
+    if (vsPlayerSelection.classList.contains("selected")) {
       boardDialog.showModal();
       resetDisplay();
+      GameController.selectPlayer();
+    } else if (vsComSelection.classList.contains("selected")) {
+      boardDialog.showModal();
+      resetDisplay();
+      GameController.selectCom();
     }
   });
 
@@ -300,4 +346,6 @@ const displayController = (() => {
       playerInput(index);
     });
   }
+
+  return { playerInput };
 })();
