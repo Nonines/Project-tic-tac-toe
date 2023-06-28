@@ -1,4 +1,4 @@
-# Odin-calculator
+# Tic Tac Toe
 
 This is my attempt at Project: [Tic Tac Toe](https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe) of [The Odin Project's](https://www.theodinproject.com/) basic Javascript projects. It is a simple Tic-tac-toe (noughts and crosses) game playable in the browser.
 
